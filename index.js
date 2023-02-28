@@ -9,7 +9,7 @@ var cors = require('cors');
 app.use(express.json());
 
 const path = require('path');
-app.use("/uploads", express.static("/home/bs/TypeScript/myApplication/Backend/uploads/"));
+app.use("/uploads", express.static("/home/bs/udBackend/uploads"));
 
 connectToMongo();
 

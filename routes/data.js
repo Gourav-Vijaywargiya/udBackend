@@ -52,7 +52,7 @@ const upload = multer({ storage : storage ,
 //         return res.status(500).send(err);
 //     }
 //     })
-router.post('/checkuser', async (req, res) => {
+router.get('/checkuser', async (req, res) => {
     try {
     const { email } = req.body;
     const User = await user.findOne({ email: email }).select("email").lean();

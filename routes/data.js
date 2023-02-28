@@ -36,22 +36,36 @@ const upload = multer({ storage : storage ,
 });
 
 // route for : check if user is already registered or not
-router.post('/checkuser', async (req,res)=>{
-    try{
-        const {email} = req.body;
-        const User = await user.findOne({email: email});
-        if(User)
-        {
-            return res.send({status:true,message:"successfull response from backend"});
-        }
-        else
-        {
-            return res.send({status:false})
-        }
-    }catch(err){
-        return res.status(500).send(err);
+// router.post('/checkuser', async (req,res)=>{
+//     try{
+//         const {email} = req.body;
+//         const User = await user.findOne({email: email});
+//         if(User)
+//         {
+//             return res.send({status:true,message:"successfull response from backend"});
+//         }
+//         else
+//         {
+//             return res.send({status:false})
+//         }
+//     }catch(err){
+//         return res.status(500).send(err);
+//     }
+//     })
+router.post('/checkuser', async (req, res) => {
+    try {
+    const { email } = req.body;
+    const User = await user.findOne({ email: email }).select("email").lean();
+    if (User) {
+    return res.send({ status: true, message: "successful response from the backend" });
+    } else {
+    return res.send({ status: false });
     }
-    })
+    } catch (err) {
+    console.log(err);
+    return res.status(500).send(err);
+    }
+    });
 
 
 // Route for: send user data to backend

@@ -52,20 +52,7 @@ router.post('/checkuser', async (req,res)=>{
         return res.status(500).send(err);
     }
     })
-// router.post('/checkuser', async (req, res) => {
-//     try {
-//     const { email } = req.body;
-//     const User = await user.findOne({ email: email }).select("email").lean();
-//     if (User) {
-//     return res.send({ status: true, message: "successful response from the backend" });
-//     } else {
-//     return res.send({ status: false });
-//     }
-//     } catch (err) {
-//     console.log(err);
-//     return res.status(500).send(err);
-//     }
-//     });
+
 
 
 // Route for: send user data to backend
@@ -171,7 +158,7 @@ router.patch('/updatelogintime',async (req,res)=>{
     try{
         const totalResults = await user.countDocuments();
         
-        const User = await user.find()
+        const User = await user.find().sort("firstName");
         res.json({User,totalResults});
     } catch(error){
         res.status(500).send(error);
@@ -183,17 +170,16 @@ router.patch('/updatelogintime',async (req,res)=>{
         try{
             const key = req.params.key;
         const regexKey = new RegExp(key, "i");
-        const searchCriteria = isNaN(key)
-        ? {
+        const searchCriteria = 
+         {
             "$or": [
             {"firstName": {$regex: regexKey}},
             {"lastName": {$regex: regexKey}},
             {"email": {$regex: regexKey}},
-            {"mobile": {$regex: regexKey}}
+            {"Mobile": {$regex: regexKey}}
             ]
         }
-        : {"Mobile": {$eq: parseInt(key)}};
-            const User = await user.find(searchCriteria);
+            const User = await user.find(searchCriteria).sort("firstName");
             const totalResults = User.length;
             res.json({User,totalResults});
         }catch(error){

@@ -23,6 +23,7 @@ const UserDetailsSchema = new mongoose.Schema({
   },
   DateofBirth: {
       type: Date,
+      
     },
     Gender: {
       type: String,

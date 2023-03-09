@@ -5,11 +5,11 @@ app.use(express.json());
 var router = express.Router();
 const path = require('path');
 const multer = require('multer');
-
+const moment = require('moment');
 
 const storage = multer.diskStorage({
     destination : function(req,file,cb){
-        console.log(file);
+        console.log(file,"FILE");
         cb(null, path.join(__dirname, '../uploads/'));
     },
     filename : function(req,file,cb){
@@ -66,7 +66,7 @@ router.post('/userdetails',async (req,res) =>{
         lastName:body.family_name,
         Mobile:body.mobile,
         Gender:body.gender,
-        DateofBirth:body.dob,
+        DateofBirth:moment(body.dob).format('YYYY-MM-DD'),
         image:body.picture,
         aboutme : body.aboutme,
         loginTime:body.loginTime,
@@ -102,11 +102,11 @@ router.patch('/updatedata', upload.single('image'),async (req,res)=>{
         lastName:body.lastName,
         Mobile:body.Mobile,
         Gender:body.Gender,
-        DateofBirth:body.DateofBirth,
+        DateofBirth:moment(body.DateofBirth).format('YYYY-MM-DD'),
         aboutme : body.aboutme,
         lastlogin : body.lastlogin
     }
-   console.log(req.file);
+   console.log(req.file,"image is" );
     if(req.file){
         updatedUserDetails.image = req.file.filename;
     }

@@ -22,7 +22,7 @@ const UserDetailsSchema = new mongoose.Schema({
     type:String,
   },
   DateofBirth: {
-      type: Date,
+      type: String,
       
     },
     Gender: {

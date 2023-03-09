@@ -9,7 +9,7 @@ const moment = require('moment');
 
 const storage = multer.diskStorage({
     destination : function(req,file,cb){
-        console.log(file,"FILE");
+        console.log(file,'FILE');
         cb(null, path.join(__dirname, '../uploads/'));
     },
     filename : function(req,file,cb){
@@ -42,7 +42,7 @@ router.post('/checkuser', async (req,res)=>{
         const User = await user.findOne({email: email});
         if(User)
         {
-            return res.send({status:true,message:"successfull response from backend"});
+            return res.send({status:true,message:'successfull response from backend'});
         }
         else
         {
@@ -78,7 +78,7 @@ router.post('/userdetails',async (req,res) =>{
       User = await user.findOne({email: body.email});
       if(User)
       {
-        return res.status(400).json({success,error:"User with this email already exists"});
+        return res.status(400).json({success,error:'User with this email already exists'});
       }
 
     User = new user(newUserDetails);
@@ -106,20 +106,19 @@ router.patch('/updatedata', upload.single('image'),async (req,res)=>{
         aboutme : body.aboutme,
         lastlogin : body.lastlogin
     }
-   console.log(req.file,"image is" );
     if(req.file){
         updatedUserDetails.image = req.file.filename;
     }
     User = await user.findOne({email: body.email});
     if(User)
     {
-        if(User.email !== body.email) return res.status(401).send("Not allowed");
+        if(User.email !== body.email) return res.status(401).send('Not allowed');
         User = await user.findOneAndUpdate({email: body.email},{$set : updatedUserDetails});
         await User.save();
-        return res.status(200).send("successfull response");
+        return res.status(200).send('successfull response');
     }
     else{
-        console.log("User not found");
+        console.log('User not found');
         return res.status(404);
     }
 }catch(error){
@@ -143,7 +142,7 @@ router.patch('/updatelogintime',async (req,res)=>{
         {
             User = await user.findOneAndUpdate({email: body.email},{$set : updatedUserDetails});
             await User.save();
-            return res.status(200).send("successfull response");
+            return res.status(200).send('successfull response');
         }
         else{
             return res.status(404);
@@ -158,7 +157,7 @@ router.patch('/updatelogintime',async (req,res)=>{
     try{
         const totalResults = await user.countDocuments();
         
-        const User = await user.find().sort("firstName");
+        const User = await user.find().sort('firstName');
         res.json({User,totalResults});
     } catch(error){
         res.status(500).send(error);
@@ -169,17 +168,17 @@ router.patch('/updatelogintime',async (req,res)=>{
     router.get('/fetchsearchdata/:key', async (req,res)=>{
         try{
             const key = req.params.key;
-        const regexKey = new RegExp(key, "i");
+        const regexKey = new RegExp(key, 'i');
         const searchCriteria = 
          {
-            "$or": [
-            {"firstName": {$regex: regexKey}},
-            {"lastName": {$regex: regexKey}},
-            {"email": {$regex: regexKey}},
-            {"Mobile": {$regex: regexKey}}
+            '$or': [
+            {'firstName': {$regex: regexKey}},
+            {'lastName': {$regex: regexKey}},
+            {'email': {$regex: regexKey}},
+            {'Mobile': {$regex: regexKey}}
             ]
         }
-            const User = await user.find(searchCriteria).sort("firstName");
+            const User = await user.find(searchCriteria).sort('firstName');
             const totalResults = User.length;
             res.json({User,totalResults});
         }catch(error){

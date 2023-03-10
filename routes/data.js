@@ -154,36 +154,43 @@ router.patch('/updatelogintime',async (req,res)=>{
 
     // Route for: Get users data
     router.get('/fetchdata', async (req,res)=>{
-    try{
-        const totalResults = await user.countDocuments();
+        try {
+            const page = req.query.page || 1;
+            const limit = req.query.limit || 5;
+            const startIndex = (page - 1) * limit;
+            const totalResults = await user.countDocuments();
         
-        const User = await user.find().sort('firstName');
-        res.json({User,totalResults});
-    } catch(error){
-        res.status(500).send(error);
-    }
+            const User = await user.find().limit(limit).skip(startIndex).exec();
+            res.json({ User, totalResults });
+          } catch (error) {
+            res.status(500).send(error);
+          }
     })
 
     // Route for: Get users data according to search criteria
     router.get('/fetchsearchdata/:key', async (req,res)=>{
-        try{
+        try {
             const key = req.params.key;
-        const regexKey = new RegExp(key, 'i');
-        const searchCriteria = 
-         {
-            '$or': [
-            {'firstName': {$regex: regexKey}},
-            {'lastName': {$regex: regexKey}},
-            {'email': {$regex: regexKey}},
-            {'Mobile': {$regex: regexKey}}
-            ]
-        }
-            const User = await user.find(searchCriteria).sort('firstName');
-            const totalResults = User.length;
-            res.json({User,totalResults});
-        }catch(error){
+            const page = req.query.page || 1;
+            const limit = req.query.limit || 5;
+            const startIndex = (page - 1) * limit;
+            const regexKey = new RegExp(key, "i");
+            const searchCriteria = {
+              $or: [
+                { firstName: { $regex: regexKey } },
+                { lastName: { $regex: regexKey } },
+                { email: { $regex: regexKey } },
+                { Mobile: { $regex: regexKey } },
+              ],
+            };
+            const totalResults = await user.find(searchCriteria).count();
+            const User = await user.find(searchCriteria).limit(limit).skip(startIndex).sort("firstName");
+            // const totalResults = User.length;
+            
+            res.json({ User, totalResults });
+          } catch (error) {
             res.status(500).send(error);
-        }
+          }
     })
 
     // route for ; get particular user data

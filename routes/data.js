@@ -185,7 +185,6 @@ router.patch('/updatelogintime',async (req,res)=>{
             };
             const totalResults = await user.find(searchCriteria).count();
             const User = await user.find(searchCriteria).limit(limit).skip(startIndex).sort("firstName");
-            // const totalResults = User.length;
             
             res.json({ User, totalResults });
           } catch (error) {

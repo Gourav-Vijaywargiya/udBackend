@@ -48,14 +48,3 @@ To run this project, you will need to add the following environment variables to
 Runs the server in the local machine at port no. 7000.
 
 Use  http://localhost:7000/ to fetch API.
-## To run in local system :
-
-**git clone https://github.com/Gourav-Vijaywargiya/udBackend.git**
-
-This command will make a clone of this repository in your local system.
-Copy pase this in your terminal and press Enter, it will be asking for a dircetory, select one and now cloning is done.
-And now follow the below steps to run the application.
-
-**npm i**
-
-This command downloads all the dependencies and development dependencies required for the application to run properly.

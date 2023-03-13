@@ -5,16 +5,13 @@ app.use(express.json());
 var router = express.Router();
 const path = require('path');
 const multer = require('multer');
-const moment = require('moment');
 
 const storage = multer.diskStorage({
     destination : function(req,file,cb){
-        console.log(file,'FILE');
         cb(null, path.join(__dirname, '../uploads/'));
     },
     filename : function(req,file,cb){
         let ext = path.extname(file.originalname);
-        console.log('ext', ext);
         cb(null,Date.now() + ext)
     }
 })
@@ -29,7 +26,6 @@ const upload = multer({ storage : storage ,
         ){
             callback(null,true)
         }else{
-            console.log('only jpg and png are supported')
             callback(null,false)
         }
     }
@@ -66,7 +62,7 @@ router.post('/userdetails',async (req,res) =>{
         lastName:body.family_name,
         Mobile:body.mobile,
         Gender:body.gender,
-        DateofBirth:moment(body.dob).format('YYYY-MM-DD'),
+        DateofBirth:body.dob,
         image:body.picture,
         aboutme : body.aboutme,
         loginTime:body.loginTime,
@@ -102,7 +98,7 @@ router.patch('/updatedata', upload.single('image'),async (req,res)=>{
         lastName:body.lastName,
         Mobile:body.Mobile,
         Gender:body.Gender,
-        DateofBirth:moment(body.DateofBirth).format('YYYY-MM-DD'),
+        DateofBirth:body.DateofBirth,
         aboutme : body.aboutme,
         lastlogin : body.lastlogin
     }
@@ -118,7 +114,6 @@ router.patch('/updatedata', upload.single('image'),async (req,res)=>{
         return res.status(200).send('successfull response');
     }
     else{
-        console.log('User not found');
         return res.status(404);
     }
 }catch(error){
@@ -160,7 +155,7 @@ router.patch('/updatelogintime',async (req,res)=>{
             const startIndex = (page - 1) * limit;
             const totalResults = await user.countDocuments();
         
-            const User = await user.find().limit(limit).skip(startIndex).exec();
+            const User = await user.find().limit(limit).skip(startIndex).sort("firstName");
             res.json({ User, totalResults });
           } catch (error) {
             res.status(500).send(error);
